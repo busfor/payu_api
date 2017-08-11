@@ -1,6 +1,6 @@
 module PayuAPI
   class CreateResponse < Response
-    SUCCESS_HTTP_STATUSES = [200, 302].freeze
+    SUCCESS_HTTP_STATUSES = [200, 201, 302].freeze
     SUCCESS_STATUSES = [
       'SUCCESS',
       'WARNING_CONTINUE_3DS',
