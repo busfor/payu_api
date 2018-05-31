@@ -205,10 +205,60 @@ response.pay_by_links
 ```
 Similarly you can use `response.pex_tokens` to get `pexTokens` and `response.card_tokens` to get `cardTokens`. In case of no results available, the result will be empty array.
 
+To be able to receive payment methods for specific customer of yours, you need to use [different client (trusted merchant)](http://developers.payu.com/en/payu_express.html#payu_express_retrieve).
+
+Get the token for client:
+
 ```ruby
-response.pex_tokens
-# => []
+response = PayuAPI.authorize_trusted_merchant(pos_id: '300046',
+  key: '098f6b...',
+  sandbox: true,
+  email: 'your@customer.email',
+  ext_customer_id: 123456)
+
+response.success?
+# => true
+
+response.auth_token
+# => "c8d4b7..."
+
+response.expires_in
+# => 43199
 ```
+
+Get client:
+
+```ruby
+client = PayuAPI::TrustedMerchantClient.new(pos_id: '300046', auth_token: response.auth_token, sandbox: true)
+
+```
+
+Retrieve payment methods which are enabled for customer:
+
+```ruby
+response = client.get_paymethods
+
+response.success?
+# => true
+
+response.pay_by_links
+#  => [
+#       {
+#         :value=>"m",
+#         :brandImageUrl=>"https://static.payu.com/images/mobile/logos/pbl_m.png",
+#         :name=>"mTransfer",
+#         :status=>"ENABLED"
+#       },
+#       {
+#         :value=>"m",
+#         :brandImageUrl=>"https://static.payu.com/images/mobile/logos/pbl_o.png",
+#         :name=>"Płacę z Bankiem Pekao S.A.",
+#         :status=>"ENABLED"
+#       },
+#    ]
+```
+Similarly you can use `response.pex_tokens` to get `pexTokens` and `response.card_tokens` to get `cardTokens`. In case of no results available, the result will be empty array.
+
 
 ## Contributing
 
