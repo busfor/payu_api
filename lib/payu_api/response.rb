@@ -11,6 +11,10 @@ module PayuAPI
       http_success? && status_success?
     end
 
+    def status_code
+      status[:statusCode]
+    end
+
     def error?
       !success?
     end
@@ -37,10 +41,6 @@ module PayuAPI
 
     def status_success?
       self.class::SUCCESS_STATUSES.include?(status_code)
-    end
-
-    def status_code
-      status[:statusCode]
     end
 
     def status_description
